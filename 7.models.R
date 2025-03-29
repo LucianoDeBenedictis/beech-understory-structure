@@ -36,7 +36,11 @@ flmtest <-  function (index, formula, nsim = 19999, cl=NULL){
 
 plot_FLM <- function(x, title = NULL){
   plot <- plot(x)+
-    xlab(expression(area~(italic(m^2))))
+    scale_x_continuous( # convert x-axis from area to length
+      labels = function(x) x * 10,
+      breaks = c(0.01, seq(from = 0.5, to = 2.5, by = 0.5)),
+      name = expression("length of sampling units" ~ (italic(m)))
+    )
   subtitle <- gsub("Graphical functional GLM: ", "", plot$labels$title)
   plot[["layers"]][[1]][["aes_params"]]$fill <- rgb(188, 223, 235, maxColorValue = 255)
   plot[["layers"]][[1]][["aes_params"]]$alpha <- 1
@@ -254,6 +258,12 @@ supp <- lapply(supp, function (x) x[indices_supp])
 flm_supp <- lapply(supp, function (x)
   lapply(x, function (y) flmtest(y, formula = formula(Y ~ RH050 + LAI), cl = cl))
 )
+
+#save results
+saveRDS(flm_supp, "FLM_supp.rds")
+
+# #load results
+# flm_supp <- readRDS("FLM_supp.rds")
 
 #plot
 plots_supp <- lapply(flm_supp, function (x)
