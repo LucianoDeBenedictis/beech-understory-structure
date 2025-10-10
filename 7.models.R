@@ -11,7 +11,7 @@ RNGkind("L'Ecuyer-CMRG")
 set.seed(24695)
 
 # Initiate cluster
-cl <- makeCluster(detectCores() - 1)
+cl <- makeCluster(detectCores())
 parallel::clusterSetRNGStream(cl = cl, iseed = 24695)
 
 #load data

@@ -26,7 +26,7 @@ data |>
   histdensity(value)+
   facet_wrap(~ trait, scales = "free")+
   theme_minimal()
-#ggsave("plots/traits_transformed.png", bg = "white")
+ggsave("plots/traits_transformed.png", bg = "white")
 
 # overall -----------------------------------------------------------------
 
