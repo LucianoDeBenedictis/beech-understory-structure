@@ -1,3 +1,13 @@
+#' ---
+#' title: "Computerized resampling"
+#' author: "Luciano L.M. De Benedictis"
+#' output: 
+#'  pdf_document:
+#'   latex_engine: xelatex
+#'   keep_md: true
+#' ---
+
+
 # setup -------------------------------------------------------------------
 
 dat <- readRDS("transect_data.rds")
@@ -18,8 +28,14 @@ steps <- unique(round(r^(seq(0,z)))) #keep unique after rounding
 z <- z + 1 #add one step if less than desired
 }
 
+steps
+
 # resample ----------------------------------------------------------------
 
 resampled <- lapply(dat, function (x) resample(x, steps, 1000))
 
 saveRDS(resampled, file = "transect_resampled.rds")
+
+# session info ------------------------------------------------------------
+
+sessionInfo()

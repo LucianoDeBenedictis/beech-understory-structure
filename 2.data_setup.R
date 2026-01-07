@@ -1,8 +1,16 @@
+#' ---
+#' title: "Understory vegetation data handling"
+#' author: "Luciano L.M. De Benedictis"
+#' output: 
+#'  pdf_document:
+#'   latex_engine: xelatex
+#'   keep_md: true
+#' ---
+
 # setup -------------------------------------------------------------------
 
 library(tidyverse)
 library(readxl)
-
 
 # data import -------------------------------------------------------------
 
@@ -43,10 +51,11 @@ dat[c("T15", "T16", "T17", "T32")] <- NULL
 NAs <- dat |> 
   lapply(function (x) filter(x, is.na(species))) |> 
   bind_rows() 
+
 NAs |> 
   distinct(code) #all "sp."
 
-#remove few genus-level records
+#remove those few genus-level records
 dat <- dat |>  
   lapply(function (x) filter(x, !is.na(species)))
 
@@ -116,9 +125,13 @@ tall <- speciestraits |>
   filter(!plant_height_m < 1.3) |> 
   pull(species)
 
+tall
+
 #how many records?
 speciesfreqs_all |> 
-  filter(species %in% tall)
+  filter(species %in% tall) |> 
+  print(n = 50)
+
 rm(tall)
 
 #remove seedlings/juveniles (above 1.3 m)
@@ -131,7 +144,7 @@ speciestraits <- left_join(speciestraits, clopla) |>
   relocate(presentclo, clonal, .after=5)
 
 ##join measured LS----
-#Viola reichembachiana and Euphorbia amygdaloides have measured LS
+#Viola reichenbachiana and Euphorbia amygdaloides have measured LS
 
 measured <- read_csv('data/measured_LS.csv') |> 
   select(2,3) |> 
@@ -224,6 +237,7 @@ onlytraits |>
   glimpse()
 
 # imputation --------------------------------------------------------------
+#devtools::install_github("jinyizju/V.PhyloMaker2")
 library(V.PhyloMaker2)
 library(funspace)
 
@@ -249,6 +263,10 @@ speciestraits <- tree$species.list |>
   relocate(status, .after = presentclo)
 
 ## imputation --------------------------------------------------------------
+
+#save traits before imputation
+
+saveRDS(speciestraits, file = 'traits_noimp.rds')
 
 #dataframe for imputation
 imputation <- speciestraits |> 
@@ -277,6 +295,10 @@ speciestraits <- speciestraits |>
   select(species:status) |> 
   left_join(imputed)
 
+speciestraits |> 
+  select(!5:8) |> 
+  print(n = 100)
+
 rm(imputation, tree, imputed)
 
 
@@ -284,3 +306,7 @@ rm(imputation, tree, imputed)
 
 saveRDS(speciestraits, file = "traits_imputation.rds")
 saveRDS(dat, file = "transect_data.rds")
+
+# session info ------------------------------------------------------------
+
+sessionInfo()

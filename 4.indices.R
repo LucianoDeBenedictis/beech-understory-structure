@@ -1,3 +1,12 @@
+#' ---
+#' title: "Calculation of diversity indices"
+#' author: "Luciano L.M. De Benedictis"
+#' output: 
+#'  pdf_document:
+#'   latex_engine: xelatex
+#'   keep_md: true
+#' ---
+
 # setup -------------------------------------------------------------------
 
 library(tidyverse)
@@ -13,6 +22,20 @@ indexcurves <- vector(mode = "list")
 
 # transform traits --------------------------------------------------------
 
+speciestraits |> 
+  select(-n) |> 
+  summarize(across(where(is.numeric),  ~ boxcox(., check = T))) |> 
+  pivot_longer(everything(), names_to = "trait", values_to = "lambda") |> 
+  arrange(lambda, trait)
+
+#' This is a dry run check. The traits will be transformed as such:
+#' 
+#' - ~ 1/sqrt N mass, LMA, offspring
+#' - ~ log spread, SSD, leaf area, diaspore mass
+#' - ~ sqrt height
+#' - ~ identity BBR size
+#' - ~ square persistence
+
 data <- speciestraits |> 
   select(species, where(is.numeric)) |> 
   select(-n) |> 
@@ -26,7 +49,6 @@ data |>
   histdensity(value)+
   facet_wrap(~ trait, scales = "free")+
   theme_minimal()
-ggsave("plots/traits_transformed.png", bg = "white")
 
 # overall -----------------------------------------------------------------
 
@@ -229,3 +251,7 @@ indices$overall |>
 
 saveRDS(indices, "indices.rds")
 saveRDS(indexcurves, "curves.rds")
+
+# session info ------------------------------------------------------------
+
+sessionInfo()

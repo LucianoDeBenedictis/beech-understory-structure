@@ -1,8 +1,16 @@
+#' ---
+#' title: "Nomenclature harmonization"
+#' author: "Luciano L.M. De Benedictis"
+#' output: 
+#'  pdf_document:
+#'   latex_engine: xelatex
+#'   keep_md: true
+#' ---
+
 # setup -------------------------------------------------------------------
 
 library(tidyverse)
 library(readxl)
-
 
 # taxonomic harmonization -------------------------------------------------
 
@@ -22,4 +30,13 @@ specieslist <- specieslist |>
   filter(!is.na(species)) |> 
   select(!"Species name")
 
+#' Here is the output. The reference species list is larger than the list for the transect, so some species don't have a transect code.
+
+print(specieslist, n = 150)
+
 write_csv(specieslist, "data/specieslookup_harm.csv")
+
+
+# session info ------------------------------------------------------------
+
+sessionInfo()

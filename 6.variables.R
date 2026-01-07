@@ -1,3 +1,12 @@
+#' ---
+#' title: "Structural and canopy variables"
+#' author: "Luciano L.M. De Benedictis"
+#' output: 
+#'  pdf_document:
+#'   latex_engine: xelatex
+#'   keep_md: true
+#' ---
+
 # setup -------------------------------------------------------------------
 
 library(tidyverse)
@@ -50,14 +59,6 @@ variables <- structure |>
 
 rm(structure, canopy)
 
-# standardization
-# FLM test is non-parametric, same results either way
-# but standardization gives more meaningful coefficients and is required for other steps here
-
-variables <- variables |> 
-  mutate(across(where(is.numeric), scale))|>
-  mutate(across(where(is.numeric), as.vector))
-
 # join categories
 cat <- read_csv("data/classification.csv")
 variables <- cat |> 
@@ -65,9 +66,21 @@ variables <- cat |>
   mutate(category = as.factor(category))
 rm(cat)
 
-# pairs plot
-# variables[3:13] |> 
-#   ggpairs(upper = list(continuous =  my_upper))
+variables |> 
+  dplyr::select(2:7, 12, 13) |> 
+  print(n = 30)
+
+#pairs plot
+variables[3:13] |>
+  ggpairs(upper = list(continuous =  my_upper))
+
+# standardization
+# FLM test is non-parametric, same results either way
+# but standardization gives more meaningful coefficients and is required for other steps here
+
+variables <- variables |> 
+  mutate(across(where(is.numeric), scale))|>
+  mutate(across(where(is.numeric), as.vector))
 
 # random forest ------------------------------------------------------------------
 
@@ -222,9 +235,17 @@ ggbiplot::ggbiplot(lda, groups = class, ellipse = T, varname.size = 4,
 ggsave("plots/LDA.png", width = 190, height = 117,
        units = "mm", bg = 'white', scale = 1.1, dpi = 1000)
 
+drawparti(x = selected[[1]], y = selected[[2]], grouping = class, method = "lda",
+          xlab = names(selected)[1], ylab = names(selected)[2], imageplot = F, col.mean = NULL)
+
 png("plots/LDA_parti.png", bg = "white", width = 190, height = 117, units = "mm",
     pointsize = 12, res = 1000)
 drawparti(x = selected[[1]], y = selected[[2]], grouping = class, method = "lda",
           xlab = names(selected)[1], ylab = names(selected)[2], imageplot = F, col.mean = NULL)
 title("Partition plot")
 dev.off()
+
+
+# session info ------------------------------------------------------------
+
+sessionInfo()

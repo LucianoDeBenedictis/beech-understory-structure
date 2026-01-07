@@ -1,3 +1,15 @@
+#' ---
+#' title: "Gather soil and topography data"
+#' author: "Luciano L.M. De Benedictis"
+#' output: 
+#'  pdf_document:
+#'   latex_engine: xelatex
+#'   keep_md: true
+#' ---
+
+
+# setup -------------------------------------------------------------------
+
 library(tidyverse)
 library(soilDB)
 library(aqp)
@@ -10,7 +22,7 @@ points <- read_csv("map/coords.csv") |>
 
 # soil --------------------------------------------------------------------
 
-# takes time, uncomment to run and save data
+#' Downloading SoilGrids data takes time, uncomment to run and save data.
 
 # soil <- fetchSoilGrids(points, verbose = T)
 # 
@@ -30,17 +42,16 @@ sites <- read_csv("data/classification.csv") |>
 
 sites |> 
   pivot_longer(c(nitrogen, ph), names_to = "variable", values_to = "value") |> 
-  ggplot(aes(x = category, y = value))+
-  geom_boxplot()+
-  facet_wrap(~variable)
+  ggplot(aes(x = category, y = value, color = category))+
+  #geom_boxplot()+
+  geom_point(position = 'jitterdodge')+
+  facet_wrap(~variable, scales = 'free_y')
 
 
 # topography --------------------------------------------------------------
 
-
 dtm_casentino <- rast("map/DTM/w48570_s10/w48570_s10.tif")
 plot(dtm_casentino)
-
 
 v <- vect(points, crs = "WGS84")
 plot(v)
@@ -69,10 +80,11 @@ sites <- sites |>
   left_join(slope) |> 
   left_join(aspect)
 
+print(sites, n = 50)
+
 write_csv(sites, "other results/sitetype.csv")
 
 # summary -----------------------------------------------------------------
-
 
 library(circular)
 
@@ -85,4 +97,10 @@ summary <- sites |>
             aspect_mean = mean.circular(aspect),
             aspect_sd = sd.circular(aspect))
 
+glimpse(summary)
+
 write_csv(summary, "other results/sitesummary.csv")
+
+# session info ------------------------------------------------------------
+
+sessionInfo()
