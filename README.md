@@ -16,7 +16,7 @@ Run the numbered scripts following the order to reproduce the analyses. Script 0
 9. complete_case: main analyses done removing missing traits instead of imputing them
 10. function_test: checks raoq and qdecomp against known data
 
-Scripts 1-9 can be rendered into reports. Pre-rendered versions are provided in PDF and markdown formats so that the output can be checked without running them.
+Scripts 1-9 can be rendered into reports. Pre-rendered versions are provided in PDF format so that the output can be checked without running them.
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15109746.svg)](https://doi.org/10.5281/zenodo.15109746)
 
