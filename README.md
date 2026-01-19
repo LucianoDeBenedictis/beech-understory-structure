@@ -18,5 +18,5 @@ Run the numbered scripts following the order to reproduce the analyses. Script 0
 
 Scripts 1-9 can be rendered into reports. Pre-rendered versions are provided in PDF format so that the output can be checked without running them.
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15109746.svg)](https://doi.org/10.5281/zenodo.15109746)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15088549.svg)](https://doi.org/10.5281/zenodo.15088549)
 
