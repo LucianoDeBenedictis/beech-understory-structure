@@ -20,7 +20,7 @@ Scripts 1-9 can be rendered into reports. Pre-rendered versions are provided in 
 
 ## Data requirements
 
-Data can be downloaded at <https://doi.org/10.5281/zenodo.17311232> and put in a "data" folder inside the workin directory.
+Data can be downloaded at <https://doi.org/10.5281/zenodo.17311232> and put in a "data" folder inside the working directory.
 
 ## Zenodo repository
 
